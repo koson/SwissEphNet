@@ -88,6 +88,7 @@ namespace SweWin
 
         SwissEph sweph;
 
+
         public FormData() {
             InitializeComponent();
             this.Disposed += FormData_Disposed;
@@ -669,6 +670,7 @@ namespace SweWin
                 } else {
                     iflgret = sweph.swe_calc(tjd_et, ipl, iflag, x, ref serr);
                     se_pname = sweph.swe_get_planet_name(ipl);
+                    //Console.WriteLine("{0}\t{1}", se_pname, x[0]);
                     if (ipl > SwissEph.SE_AST_OFFSET) {
                         s = C.sprintf("#%d", (int)astno[iast - 1]);
                         se_pname += new String(' ', 11 - s.Length) + s;
