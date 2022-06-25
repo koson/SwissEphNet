@@ -55,6 +55,8 @@
             this.EDIT_OUTPUT2 = new System.Windows.Forms.TextBox();
             this.PB_DOIT = new System.Windows.Forms.Button();
             this.PB_EXIT = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // LABEL_DATE
@@ -337,7 +339,7 @@
             this.EDIT_OUTPUT2.Name = "EDIT_OUTPUT2";
             this.EDIT_OUTPUT2.ReadOnly = true;
             this.EDIT_OUTPUT2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.EDIT_OUTPUT2.Size = new System.Drawing.Size(827, 389);
+            this.EDIT_OUTPUT2.Size = new System.Drawing.Size(827, 555);
             this.EDIT_OUTPUT2.TabIndex = 27;
             this.EDIT_OUTPUT2.WordWrap = false;
             // 
@@ -361,12 +363,21 @@
             this.PB_EXIT.UseVisualStyleBackColor = true;
             this.PB_EXIT.Click += new System.EventHandler(this.PB_EXIT_Click);
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(845, 12);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(497, 709);
+            this.dataGridView1.TabIndex = 30;
+            // 
             // FormData
             // 
             this.AcceptButton = this.PB_DOIT;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(851, 567);
+            this.ClientSize = new System.Drawing.Size(1354, 733);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.PB_EXIT);
             this.Controls.Add(this.PB_DOIT);
             this.Controls.Add(this.EDIT_OUTPUT2);
@@ -399,7 +410,7 @@
             this.Controls.Add(this.LABEL_DATE);
             this.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormData";
@@ -407,6 +418,7 @@
             this.ShowInTaskbar = false;
             this.Text = "Calculate Planets and Houses";
             this.Load += new System.EventHandler(this.FormData_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -444,5 +456,6 @@
         private System.Windows.Forms.TextBox EDIT_OUTPUT2;
         private System.Windows.Forms.Button PB_DOIT;
         private System.Windows.Forms.Button PB_EXIT;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }

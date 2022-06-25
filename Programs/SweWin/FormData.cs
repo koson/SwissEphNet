@@ -13,8 +13,8 @@ namespace SweWin
 {
     public partial class FormData : Form
     {
-        const int BUFLEN  =8000;
-        const string MY_ODEGREE_STRING ="°";
+        const int BUFLEN = 8000;
+        const string MY_ODEGREE_STRING = "°";
         const string progname = "Swisseph Test Program";
 
         static string[] etut = new string[] { "UT", "ET" };
@@ -41,12 +41,14 @@ namespace SweWin
         const string PLSEL_A = "0123456789mtABCDEFGHIJKLMNOPQRSTUVWX";
 
         //extern char FAR *pgmptr;
-        static string[] zod_nam = new string[]{"ar", "ta", "ge", "cn", "le", "vi", "li", "sc", "sa", "cp", "aq", "pi"};
+        static string[] zod_nam = new string[] { "ar", "ta", "ge", "cn", "le", "vi", "li", "sc", "sa", "cp", "aq", "pi" };
 
         class cpd
         {
-            public cpd Clone() {
-                return new cpd() {
+            public cpd Clone()
+            {
+                return new cpd()
+                {
                     etut = this.etut,
                     lon_e_w = this.lon_e_w,
                     lat_n_s = this.lat_n_s,
@@ -88,27 +90,31 @@ namespace SweWin
 
         SwissEph sweph;
 
-
-        public FormData() {
+        List<Planets> planets = new List<Planets>();
+        public FormData()
+        {
             InitializeComponent();
             this.Disposed += FormData_Disposed;
             sweph = new SwissEph();
             sweph.OnLoadFile += sweph_OnLoadFile;
             init_data();
             string argv0 = Environment.GetCommandLineArgs()[0];
-            if (make_ephemeris_path(SwissEph.SEFLG_SWIEPH | SwissEph.SEFLG_SPEED, ref argv0) == SwissEph.ERR) {
+            if (make_ephemeris_path(SwissEph.SEFLG_SWIEPH | SwissEph.SEFLG_SPEED, ref argv0) == SwissEph.ERR)
+            {
                 MessageBox.Show("error in make_ephemeris_path()", progname);
                 Environment.Exit(1);
             }
         }
 
-        Stream SearchFile(String fileName) {
+        Stream SearchFile(String fileName)
+        {
             fileName = fileName.Trim('/', '\\');
-            var folders = new string[] { 
+            var folders = new string[] {
                 System.IO.Path.Combine(Application.StartupPath, "Datas"),
                 @"C:\sweph\ephe"
             };
-            foreach (var folder in folders) {
+            foreach (var folder in folders)
+            {
                 var f = Path.Combine(folder, fileName);
                 if (File.Exists(f))
                     return new System.IO.FileStream(f, System.IO.FileMode.Open, System.IO.FileAccess.Read);
@@ -116,22 +122,28 @@ namespace SweWin
             return null;
         }
 
-        void sweph_OnLoadFile(object sender, LoadFileEventArgs e) {
-            if (e.FileName.StartsWith("[ephe]")) {
+        void sweph_OnLoadFile(object sender, LoadFileEventArgs e)
+        {
+            if (e.FileName.StartsWith("[ephe]"))
+            {
                 e.File = SearchFile(e.FileName.Replace("[ephe]", string.Empty));
-            } else {
+            }
+            else
+            {
                 var f = e.FileName;
                 if (System.IO.File.Exists(f))
                     e.File = new System.IO.FileStream(f, System.IO.FileMode.Open, System.IO.FileAccess.Read);
             }
         }
 
-        void FormData_Disposed(object sender, EventArgs e) {
+        void FormData_Disposed(object sender, EventArgs e)
+        {
             sweph.Dispose();
             sweph = null;
         }
 
-        void init_data() {
+        void init_data()
+        {
             //time_t time_of_day;
             //struct tm tmbuf;
             var time_of_day = DateTime.UtcNow;
@@ -160,53 +172,61 @@ namespace SweWin
             pd.sast = "433, 3045, 7066";
         }
 
-        private void FormData_Load(object sender, EventArgs e) {
+        private void FormData_Load(object sender, EventArgs e)
+        {
             int i, j;
             old_pd = pd.Clone();
             COMBO_N_S.Items.Clear();
-            for (i = j = 0; i < 2; i++) {
+            for (i = j = 0; i < 2; i++)
+            {
                 if (String.Compare(lat_n_s[i], pd.lat_n_s) == 0) j = i;
                 COMBO_N_S.Items.Add(lat_n_s[i]);
             }
             COMBO_N_S.SelectedIndex = j;
 
             COMBO_E_W.Items.Clear();
-            for (i = j = 0; i < 2; i++) {
+            for (i = j = 0; i < 2; i++)
+            {
                 if (String.Compare(lon_e_w[i], pd.lon_e_w) == 0) j = i;
                 COMBO_E_W.Items.Add(lon_e_w[i]);
             }
             COMBO_E_W.SelectedIndex = j;
 
             COMBO_ET_UT.Items.Clear();
-            for (i = j = 0; i < 2; i++) {
+            for (i = j = 0; i < 2; i++)
+            {
                 if (String.Compare(etut[i], pd.etut) == 0) j = i;
                 COMBO_ET_UT.Items.Add(etut[i]);
             }
             COMBO_ET_UT.SelectedIndex = j;
 
             COMBO_EPHE.Items.Clear();
-            for (i = j = 0; i < NEPHE; i++) {
+            for (i = j = 0; i < NEPHE; i++)
+            {
                 if (String.Compare(ephe[i], pd.ephe) == 0) j = i;
                 COMBO_EPHE.Items.Add(ephe[i]);
             }
             COMBO_EPHE.SelectedIndex = j;
 
             COMBO_PLANSEL.Items.Clear();
-            for (i = j = 0; i < NPLANSEL; i++) {
+            for (i = j = 0; i < NPLANSEL; i++)
+            {
                 if (String.Compare(plansel[i], pd.plansel) == 0) j = i;
                 COMBO_PLANSEL.Items.Add(plansel[i]);
             }
             COMBO_PLANSEL.SelectedIndex = j;
 
             COMBO_CENTER.Items.Clear();
-            for (i = j = 0; i < NCENTERS; i++) {
+            for (i = j = 0; i < NCENTERS; i++)
+            {
                 if (String.Compare(ctr[i], pd.ctr) == 0) j = i;
                 COMBO_CENTER.Items.Add(ctr[i]);
             }
             COMBO_CENTER.SelectedIndex = j;
 
             COMBO_HSYS.Items.Clear();
-            for (i = j = 0; i < NHSYS; i++) {
+            for (i = j = 0; i < NHSYS; i++)
+            {
                 if (String.Compare(hsysname[i], pd.hsysname) == 0) j = i;
                 COMBO_HSYS.Items.Add(hsysname[i]);
             }
@@ -229,44 +249,55 @@ namespace SweWin
             EDIT_ASTNO.Text = pd.sast;
         }
 
-        private void PB_EXIT_Click(object sender, EventArgs e) {
+        private void PB_EXIT_Click(object sender, EventArgs e)
+        {
             this.Close();
         }
 
-        private void COMBO_EPHE_SelectedIndexChanged(object sender, EventArgs e) {
+        private void COMBO_EPHE_SelectedIndexChanged(object sender, EventArgs e)
+        {
             pd.ephe = COMBO_EPHE.Text;
         }
 
-        private void COMBO_PLANSEL_SelectedIndexChanged(object sender, EventArgs e) {
+        private void COMBO_PLANSEL_SelectedIndexChanged(object sender, EventArgs e)
+        {
             pd.plansel = COMBO_PLANSEL.Text;
         }
 
-        private void COMBO_CENTER_SelectedIndexChanged(object sender, EventArgs e) {
+        private void COMBO_CENTER_SelectedIndexChanged(object sender, EventArgs e)
+        {
             pd.ctr = COMBO_CENTER.Text;
         }
 
-        private void COMBO_ET_UT_SelectedIndexChanged(object sender, EventArgs e) {
+        private void COMBO_ET_UT_SelectedIndexChanged(object sender, EventArgs e)
+        {
             pd.etut = COMBO_ET_UT.Text;
         }
 
-        private void COMBO_E_W_SelectedIndexChanged(object sender, EventArgs e) {
+        private void COMBO_E_W_SelectedIndexChanged(object sender, EventArgs e)
+        {
             pd.lon_e_w = COMBO_E_W.Text;
         }
 
-        private void COMBO_N_S_SelectedIndexChanged(object sender, EventArgs e) {
+        private void COMBO_N_S_SelectedIndexChanged(object sender, EventArgs e)
+        {
             pd.lat_n_s = COMBO_N_S.Text;
         }
 
-        private void COMBO_HSYS_SelectedIndexChanged(object sender, EventArgs e) {
+        private void COMBO_HSYS_SelectedIndexChanged(object sender, EventArgs e)
+        {
             pd.hsysname = COMBO_HSYS.Text;
         }
 
-        bool UpdateEditor(TextBox editor, Action<uint> setValue, uint? minVal = null, uint? maxVal = null) {
+        bool UpdateEditor(TextBox editor, Action<uint> setValue, uint? minVal = null, uint? maxVal = null)
+        {
             var s = editor.Text; uint ulng = 0;
-            if (!String.IsNullOrEmpty(s)) {
+            if (!String.IsNullOrEmpty(s))
+            {
                 if (atoulng(s, ref ulng) == SwissEph.OK && (minVal == null || ulng >= minVal) && (maxVal == null || ulng <= maxVal))
                     setValue(ulng);
-                else {
+                else
+                {
                     editor.Text = "";
                     return false;
                 }
@@ -274,12 +305,15 @@ namespace SweWin
             return true;
         }
 
-        bool UpdateEditor(TextBox editor, Action<int> setValue, int? minVal = null, int? maxVal = null) {
+        bool UpdateEditor(TextBox editor, Action<int> setValue, int? minVal = null, int? maxVal = null)
+        {
             var s = editor.Text; int lng = 0;
-            if (!String.IsNullOrEmpty(s)) {
+            if (!String.IsNullOrEmpty(s))
+            {
                 if (atoslng(s, ref lng) == SwissEph.OK && (minVal == null || lng >= minVal) && (maxVal == null || lng <= maxVal))
                     setValue(lng);
-                else {
+                else
+                {
                     editor.Text = "";
                     return false;
                 }
@@ -287,7 +321,8 @@ namespace SweWin
             return true;
         }
 
-        private void EDIT_DAY_TextChanged(object sender, EventArgs e) {
+        private void EDIT_DAY_TextChanged(object sender, EventArgs e)
+        {
             //var s = EDIT_DAY.Text; uint ulng = 0;
             //if (!String.IsNullOrEmpty(s)) {
             //    if (atoulng(s, ref ulng) == SwissEph.OK && ulng > 0 && ulng <= 31)
@@ -298,7 +333,8 @@ namespace SweWin
             UpdateEditor(EDIT_DAY, u => pd.mday = u, 1, 31);
         }
 
-        private void EDIT_MONTH_TextChanged(object sender, EventArgs e) {
+        private void EDIT_MONTH_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_MONTH:
             //            GetDlgItemText( hdlg, cmd, s, 3);
             //            if (*s != '\0') {
@@ -311,7 +347,8 @@ namespace SweWin
             UpdateEditor(EDIT_MONTH, u => pd.mon = u, 1, 12);
         }
 
-        private void EDIT_YEAR_TextChanged(object sender, EventArgs e) {
+        private void EDIT_YEAR_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_YEAR:
             //            GetDlgItemText( hdlg, cmd, s, 6);
             //            if (*s != '\0') {
@@ -325,7 +362,8 @@ namespace SweWin
             UpdateEditor(EDIT_YEAR, i => pd.year = i);
         }
 
-        private void EDIT_HOUR_TextChanged(object sender, EventArgs e) {
+        private void EDIT_HOUR_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_HOUR:
             //            GetDlgItemText( hdlg, cmd, s, 3);
             //            if (*s != '\0') {
@@ -338,7 +376,8 @@ namespace SweWin
             UpdateEditor(EDIT_HOUR, u => pd.hour = u, null, 24 - 1);
         }
 
-        private void EDIT_MINUTE_TextChanged(object sender, EventArgs e) {
+        private void EDIT_MINUTE_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_MINUTE:
             //            GetDlgItemText( hdlg, cmd, s, 3);
             //            if (*s != '\0') {
@@ -351,7 +390,8 @@ namespace SweWin
             UpdateEditor(EDIT_MINUTE, u => pd.min = u, null, 60 - 1);
         }
 
-        private void EDIT_SECOND_TextChanged(object sender, EventArgs e) {
+        private void EDIT_SECOND_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_SECOND:
             //            GetDlgItemText( hdlg, cmd, s, 3);
             //            if (*s != '\0') {
@@ -364,7 +404,8 @@ namespace SweWin
             UpdateEditor(EDIT_SECOND, u => pd.sec = u, null, 60 - 1);
         }
 
-        private void EDIT_LONG_TextChanged(object sender, EventArgs e) {
+        private void EDIT_LONG_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_LONG:
             //            GetDlgItemText( hdlg, cmd, s, 4);
             //            if (*s != '\0') {
@@ -377,7 +418,8 @@ namespace SweWin
             UpdateEditor(EDIT_LONG, u => pd.lon_deg = u, null, 180 - 1);
         }
 
-        private void EDIT_LONGM_TextChanged(object sender, EventArgs e) {
+        private void EDIT_LONGM_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_LONGM:
             //            GetDlgItemText( hdlg, cmd, s, 3);
             //            if (*s != '\0') {
@@ -390,7 +432,8 @@ namespace SweWin
             UpdateEditor(EDIT_LONGM, u => pd.lon_min = u, null, 60 - 1);
         }
 
-        private void EDIT_LONGS_TextChanged(object sender, EventArgs e) {
+        private void EDIT_LONGS_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_LONGS:
             //            GetDlgItemText( hdlg, cmd, s, 3);
             //            if (*s != '\0') {
@@ -403,7 +446,8 @@ namespace SweWin
             UpdateEditor(EDIT_LONGS, u => pd.lon_sec = u, null, 60 - 1);
         }
 
-        private void EDIT_LAT_TextChanged(object sender, EventArgs e) {
+        private void EDIT_LAT_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_LAT:
             //            GetDlgItemText( hdlg, cmd, s, 3);
             //            if (*s != '\0') {
@@ -416,7 +460,8 @@ namespace SweWin
             UpdateEditor(EDIT_LAT, u => pd.lat_deg = u, null, 90 - 1);
         }
 
-        private void EDIT_LATM_TextChanged(object sender, EventArgs e) {
+        private void EDIT_LATM_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_LATM:
             //            GetDlgItemText( hdlg, cmd, s, 3);
             //            if (*s != '\0') {
@@ -429,7 +474,8 @@ namespace SweWin
             UpdateEditor(EDIT_LATM, u => pd.lat_min = u, null, 60 - 1);
         }
 
-        private void EDIT_LATS_TextChanged(object sender, EventArgs e) {
+        private void EDIT_LATS_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_LATS:
             //            GetDlgItemText( hdlg, cmd, s, 3);
             //            if (*s != '\0') {
@@ -442,7 +488,8 @@ namespace SweWin
             UpdateEditor(EDIT_LATS, u => pd.lat_sec = u, null, 60 - 1);
         }
 
-        private void EDIT_ALT_TextChanged(object sender, EventArgs e) {
+        private void EDIT_ALT_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_ALT:
             //            GetDlgItemText( hdlg, cmd, s, 10);
             //            if (*s != '\0') {
@@ -456,7 +503,8 @@ namespace SweWin
             UpdateEditor(EDIT_ALT, u => pd.alt = u);
         }
 
-        private void EDIT_ASTNO_TextChanged(object sender, EventArgs e) {
+        private void EDIT_ASTNO_TextChanged(object sender, EventArgs e)
+        {
             //        case EDIT_ASTNO:
             //            GetDlgItemText( hdlg, cmd, s, 50);
             //            strcpy(pd.sast, s);
@@ -465,7 +513,8 @@ namespace SweWin
             pd.sast = EDIT_ASTNO.Text;
         }
 
-        private void PB_DOIT_Click(object sender, EventArgs e) {
+        private void PB_DOIT_Click(object sender, EventArgs e)
+        {
             //        case PB_DOIT :     
             //            buf = (char *)calloc(BUFLEN, sizeof(char));
             //            swisseph(buf);
@@ -473,6 +522,7 @@ namespace SweWin
             //            free(buf);
             //            return( TRUE );
             //        }
+
             StringBuilder buf = new StringBuilder();
             swisseph(buf);
             EDIT_OUTPUT2.Text = buf.ToString();
@@ -480,7 +530,11 @@ namespace SweWin
 
 
 
-        int swisseph(StringBuilder buf) {
+        int swisseph(StringBuilder buf)
+        {
+
+            planets.Clear();
+
             string serr = String.Empty, serr_save = String.Empty, serr_warn = String.Empty;
             string s, s1, s2;
             string star = String.Empty;
@@ -522,35 +576,51 @@ namespace SweWin
             char hsys = pd.hsysname[0];
             //  *serr = *serr_save = *serr_warn = '\0';
             //ephepath = ".;sweph";
-            if (String.Compare(pd.ephe, ephe[1]) == 0) {
+            if (String.Compare(pd.ephe, ephe[1]) == 0)
+            {
                 whicheph = SwissEph.SEFLG_JPLEPH;
                 fname = SwissEph.SE_FNAME_DE406;
-            } else if (String.Compare(pd.ephe, ephe[0]) == 0)
+            }
+            else if (String.Compare(pd.ephe, ephe[0]) == 0)
                 whicheph = SwissEph.SEFLG_SWIEPH;
             else
                 whicheph = SwissEph.SEFLG_MOSEPH;
             if (String.Compare(pd.etut, "UT") == 0)
                 universal_time = true;
-            if (String.Compare(pd.plansel, plansel[0]) == 0) {
+            if (String.Compare(pd.plansel, plansel[0]) == 0)
+            {
                 plsel = PLSEL_D;
-            } else if (String.Compare(pd.plansel, plansel[1]) == 0) {
+            }
+            else if (String.Compare(pd.plansel, plansel[1]) == 0)
+            {
                 plsel = PLSEL_P;
-            } else if (String.Compare(pd.plansel, plansel[2]) == 0) {
+            }
+            else if (String.Compare(pd.plansel, plansel[2]) == 0)
+            {
                 plsel = PLSEL_A;
             }
             if (String.Compare(pd.ctr, ctr[0]) == 0)
                 calc_house_pos = true;
-            else if (String.Compare(pd.ctr, ctr[1]) == 0) {
+            else if (String.Compare(pd.ctr, ctr[1]) == 0)
+            {
                 iflag |= SwissEph.SEFLG_TOPOCTR;
                 calc_house_pos = true;
-            } else if (String.Compare(pd.ctr, ctr[2]) == 0) {
+            }
+            else if (String.Compare(pd.ctr, ctr[2]) == 0)
+            {
                 iflag |= SwissEph.SEFLG_HELCTR;
-            } else if (String.Compare(pd.ctr, ctr[3]) == 0) {
+            }
+            else if (String.Compare(pd.ctr, ctr[3]) == 0)
+            {
                 iflag |= SwissEph.SEFLG_BARYCTR;
-            } else if (String.Compare(pd.ctr, ctr[4]) == 0) {
+            }
+            else if (String.Compare(pd.ctr, ctr[4]) == 0)
+            {
                 iflag |= SwissEph.SEFLG_SIDEREAL;
                 sweph.swe_set_sid_mode(SwissEph.SE_SIDM_FAGAN_BRADLEY, 0, 0);
-            } else if (String.Compare(pd.ctr, ctr[5]) == 0) {
+            }
+            else if (String.Compare(pd.ctr, ctr[5]) == 0)
+            {
                 iflag |= SwissEph.SEFLG_SIDEREAL;
                 sweph.swe_set_sid_mode(SwissEph.SE_SIDM_LAHIRI, 0, 0);
                 //#if 0
@@ -600,11 +670,13 @@ namespace SweWin
                 jday, jmon, jyear, bc, jul,
                 jhour, jmin, jsec, pd.etut));
             jut = jhour + jmin / 60.0 + jsec / 3600.0;
-            if (universal_time) {
+            if (universal_time)
+            {
                 delt = sweph.swe_deltat(tjd_ut);
                 do_print(buf, C.sprintf(" delta t: %f sec", delt * 86400.0));
                 tjd_et = tjd_ut + delt;
-            } else
+            }
+            else
                 tjd_et = tjd_ut;
             do_print(buf, C.sprintf(" jd (ET) = %f\n", tjd_et));
             iflgret = sweph.swe_calc(tjd_et, SwissEph.SE_ECL_NUT, iflag, x, ref serr);
@@ -634,66 +706,97 @@ namespace SweWin
             armc = sidt * 15;
             /* additional asteroids */
             //splan = plsel;
-            if (String.Compare(plsel, PLSEL_P) == 0) {
+            if (String.Compare(plsel, PLSEL_P) == 0)
+            {
                 var cpos = pd.sast.Split(",;. \t".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 j = cpos.Length;
-                for (i = 0, nast = 0; i < j; i++) {
-                    if ((astno[nast] = int.Parse(cpos[i])) > 0) {
+                for (i = 0, nast = 0; i < j; i++)
+                {
+                    if ((astno[nast] = int.Parse(cpos[i])) > 0)
+                    {
                         nast++;
                         plsel += "+";
                     }
                 }
-            } int pspi;
-            for (pspi = 0, iast = 0; pspi < plsel.Length; pspi++) {
+            }
+            int pspi;
+            for (pspi = 0, iast = 0; pspi < plsel.Length; pspi++)
+            {
                 psp = plsel[pspi];
-                if (psp == '+') {
+                if (psp == '+')
+                {
                     ipl = SwissEph.SE_AST_OFFSET + (int)astno[iast];
                     iast++;
-                } else
+                }
+                else
                     ipl = letter_to_ipl(psp);
-                if ((iflag & SwissEph.SEFLG_HELCTR) != 0) {
+                if ((iflag & SwissEph.SEFLG_HELCTR) != 0)
+                {
                     if (ipl == SwissEph.SE_SUN
                       || ipl == SwissEph.SE_MEAN_NODE || ipl == SwissEph.SE_TRUE_NODE
                       || ipl == SwissEph.SE_MEAN_APOG || ipl == SwissEph.SE_OSCU_APOG)
                         continue;
-                } else if ((iflag & SwissEph.SEFLG_BARYCTR) != 0) {
+                }
+                else if ((iflag & SwissEph.SEFLG_BARYCTR) != 0)
+                {
                     if (ipl == SwissEph.SE_MEAN_NODE || ipl == SwissEph.SE_TRUE_NODE
                       || ipl == SwissEph.SE_MEAN_APOG || ipl == SwissEph.SE_OSCU_APOG)
                         continue;
-                } else          /* geocentric */
-                    if (ipl == SwissEph.SE_EARTH)
-                        continue;
+                }
+                else          /* geocentric */
+                  if (ipl == SwissEph.SE_EARTH)
+                    continue;
                 /* ecliptic position */
-                if (ipl == SwissEph.SE_FIXSTAR) {
+                if (ipl == SwissEph.SE_FIXSTAR)
+                {
                     iflgret = sweph.swe_fixstar(star, tjd_et, iflag, x, ref serr);
                     se_pname = star;
-                } else {
+                }
+                else
+                {
                     iflgret = sweph.swe_calc(tjd_et, ipl, iflag, x, ref serr);
                     se_pname = sweph.swe_get_planet_name(ipl);
                     //Console.WriteLine("{0}\t{1}", se_pname, x[0]);
-                    if (ipl > SwissEph.SE_AST_OFFSET) {
+                    planets.Add(new Planets()
+                    {
+                        Name = se_pname,
+                        eclLong = x[0],
+                        eclLat = x[1],
+                        Distance = x[2],
+                        Speed = x[3],
+                        House = hpos,
+                        No = ipl
+                    });
+                    if (ipl > SwissEph.SE_AST_OFFSET)
+                    {
                         s = C.sprintf("#%d", (int)astno[iast - 1]);
                         se_pname += new String(' ', 11 - s.Length) + s;
                     }
                 }
-                if (iflgret >= 0) {
-                    if (calc_house_pos) {
+                if (iflgret >= 0)
+                {
+                    if (calc_house_pos)
+                    {
                         hpos = sweph.swe_house_pos(armc, lat, eps_true, hsys, x, ref serr);
                         if (hpos == 0)
                             iflgret = SwissEph.ERR;
                     }
                 }
-                if (iflgret < 0) {
-                    if (!String.IsNullOrEmpty(serr) && String.Compare(serr, serr_save) != 0) {
+                if (iflgret < 0)
+                {
+                    if (!String.IsNullOrEmpty(serr) && String.Compare(serr, serr_save) != 0)
+                    {
                         serr_save = serr;
                         do_print(buf, "error: ");
                         do_print(buf, serr);
                         do_print(buf, "\n");
                     }
-                } else if (!String.IsNullOrEmpty(serr) && String.IsNullOrEmpty(serr_warn))
+                }
+                else if (!String.IsNullOrEmpty(serr) && String.IsNullOrEmpty(serr_warn))
                     serr_warn = serr;
                 /* equator position */
-                if (fmt.IndexOfAny("aADdQ".ToCharArray()) >= 0) {
+                if (fmt.IndexOfAny("aADdQ".ToCharArray()) >= 0)
+                {
                     iflag2 = iflag | SwissEph.SEFLG_EQUATORIAL;
                     if (ipl == SwissEph.SE_FIXSTAR)
                         iflgret = sweph.swe_fixstar(star, tjd_et, iflag2, xequ, ref serr);
@@ -701,7 +804,8 @@ namespace SweWin
                         iflgret = sweph.swe_calc(tjd_et, ipl, iflag2, xequ, ref serr);
                 }
                 /* ecliptic cartesian position */
-                if (fmt.IndexOfAny("XU".ToCharArray()) >= 0) {
+                if (fmt.IndexOfAny("XU".ToCharArray()) >= 0)
+                {
                     iflag2 = iflag | SwissEph.SEFLG_XYZ;
                     if (ipl == SwissEph.SE_FIXSTAR)
                         iflgret = sweph.swe_fixstar(star, tjd_et, iflag2, xcart, ref serr);
@@ -709,7 +813,8 @@ namespace SweWin
                         iflgret = sweph.swe_calc(tjd_et, ipl, iflag2, xcart, ref serr);
                 }
                 /* equator cartesian position */
-                if (fmt.IndexOfAny("xu".ToCharArray()) >= 0) {
+                if (fmt.IndexOfAny("xu".ToCharArray()) >= 0)
+                {
                     iflag2 = iflag | SwissEph.SEFLG_XYZ | SwissEph.SEFLG_EQUATORIAL;
                     if (ipl == SwissEph.SE_FIXSTAR)
                         iflgret = sweph.swe_fixstar(star, tjd_et, iflag2, xcartq, ref serr);
@@ -723,11 +828,13 @@ namespace SweWin
                  * sparated by the gap string.
                  */
                 int spi = 0;
-                for (spi = 0; spi < fmt.Length; spi++) {
+                for (spi = 0; spi < fmt.Length; spi++)
+                {
                     char sp = fmt[spi];
                     if (spi > 0)
                         do_print(buf, gap);
-                    switch (sp) {
+                    switch (sp)
+                    {
                         case 'y':
                             do_print(buf, "%d", jyear);
                             break;
@@ -772,12 +879,15 @@ namespace SweWin
                         case 's':
                             var sp2i = spi + 1;
                             char sp2 = fmt.Length <= sp2i ? '\0' : fmt[sp2i];
-                            if (sp2 == 'S' || sp2 == 's' || fmt.IndexOfAny("XUxu".ToCharArray()) >= 0) {
-                                for (sp2i = 0; sp2i < fmt.Length; sp2i++) {
+                            if (sp2 == 'S' || sp2 == 's' || fmt.IndexOfAny("XUxu".ToCharArray()) >= 0)
+                            {
+                                for (sp2i = 0; sp2i < fmt.Length; sp2i++)
+                                {
                                     sp2 = fmt[sp2i];
                                     if (sp2i > 0)
                                         do_print(buf, gap);
-                                    switch (sp2) {
+                                    switch (sp2)
+                                    {
                                         case 'L':       /* speed! */
                                         case 'Z':       /* speed! */
                                             do_print(buf, dms(x[3], round_flag));
@@ -831,11 +941,14 @@ namespace SweWin
                                             break;
                                     }
                                 }
-                                if (fmt.Length <= spi + 1 && (fmt[spi + 1] == 'S' || fmt[sp + 1] == 's')) {
+                                if (fmt.Length <= spi + 1 && (fmt[spi + 1] == 'S' || fmt[sp + 1] == 's'))
+                                {
                                     spi++;
                                     sp = fmt[spi];
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 do_print(buf, dms(x[3], round_flag));
                             }
                             break;
@@ -861,12 +974,15 @@ namespace SweWin
                             do_print(buf, "%# 14.9f", x[2]);
                             break;
                         case 'r':
-                            if (ipl == SwissEph.SE_MOON) { /* for moon print parallax */
+                            if (ipl == SwissEph.SE_MOON)
+                            { /* for moon print parallax */
                                 sinp = 8.794 / x[2];        /* in seconds of arc */
                                 ar = sinp * (1 + sinp * sinp * 3.917402e-12);
                                 /* the factor is 1 / (3600^2 * (180/pi)^2 * 6) */
                                 do_print(buf, "%# 13.5f\"", ar);
-                            } else {
+                            }
+                            else
+                            {
                                 do_print(buf, "%# 14.9f", x[2]);
                             }
                             break;
@@ -905,13 +1021,15 @@ namespace SweWin
                             break;
                     } /* switch */
                 }   /* for sp */
-                if (calc_house_pos) {
+                if (calc_house_pos)
+                {
                     //sprintf(s, "  %# 6.4f", hpos);
                     do_print(buf, "%# 9.4f", hpos);
                 }
                 do_print(buf, "\n");
             }     /* for psp */
-            if (!String.IsNullOrEmpty(serr_warn)) {
+            if (!String.IsNullOrEmpty(serr_warn))
+            {
                 do_print(buf, "\nwarning: ");
                 do_print(buf, serr_warn);
                 do_print(buf, "\n");
@@ -919,13 +1037,13 @@ namespace SweWin
             /* houses */
             do_print(buf, C.sprintf("\nHouse Cusps (%s)\n\n", pd.hsysname));
             a = sidt + 0.5 / 3600;
-            do_print(buf, C.sprintf("sid. time : %4d:%#02d:%#02d  ", (int)a, 
-                (int)((a * 60.0) % 60.0), 
+            do_print(buf, C.sprintf("sid. time : %4d:%#02d:%#02d  ", (int)a,
+                (int)((a * 60.0) % 60.0),
                 (int)((a * 3600.0) % 60.0))
                 );
             a = armc + 0.5 / 3600;
             do_print(buf, "armc      : %4d%s%#02d'%#02d\"\n",
-                  (int)armc, MY_ODEGREE_STRING, 
+                  (int)armc, MY_ODEGREE_STRING,
                   (int)((armc * 60.0) % 60.0),
                   (int)((a * 3600.0) % 60.0));
             do_print(buf, "geo. lat. : %4d%c%#02d'%#02d\" ",
@@ -948,15 +1066,41 @@ namespace SweWin
             //#else
             do_print(buf, C.sprintf("AC        : %s\n", dms(ascmc[0], round_flag | BIT_ZODIAC)));
             do_print(buf, C.sprintf("MC        : %s\n", dms(ascmc[1], round_flag | BIT_ZODIAC)));
-            for (i = 1; i <= 12; i++) {
+            for (i = 1; i <= 12; i++)
+            {
                 do_print(buf, C.sprintf("house   %2d: %s\n", i, dms(cusp[i], round_flag | BIT_ZODIAC)));
             }
             do_print(buf, C.sprintf("Vertex    : %s\n", dms(ascmc[3], round_flag | BIT_ZODIAC)));
             //#endif  
+
+            //if (dataGridView1.DataSource != null)
+            //{
+                dataGridView1.DataSource = null;
+                dataGridView1.Rows.Clear();
+                dataGridView1.Refresh();
+            //}
+            dataGridView1.DataSource = planets;
+            dataGridView1.Columns["no"].DisplayIndex = 0;
+            dataGridView1.Columns["name"].DisplayIndex = 1;
+            dataGridView1.Columns["ecllong"].DisplayIndex = 2;
+            dataGridView1.Columns["ecllat"].DisplayIndex = 3;
+            dataGridView1.Columns["distance"].DisplayIndex = 4;
+            dataGridView1.Columns["speed"].DisplayIndex = 5;
+            dataGridView1.Columns["house"].DisplayIndex = 6;
+
+
+
+
+            dataGridView1.Columns["speed"].DefaultCellStyle.ForeColor = Color.Green;
+            dataGridView1.Columns["distance"].DefaultCellStyle.Format = "0.0000";
+            dataGridView1.Columns["eclLong"].DefaultCellStyle.Format = "0.00000";
+            dataGridView1.Columns["eclLat"].DefaultCellStyle.Format = "0.00000";
+
             return 0;
         }
 
-        static string dms(double x, long iflag) {
+        static string dms(double x, long iflag)
+        {
             int izod;
             long k, kdeg, kmin, ksec;
             string c = MY_ODEGREE_STRING, s1;
@@ -966,21 +1110,26 @@ namespace SweWin
             string s = String.Empty;
             if ((iflag & SwissEph.SEFLG_EQUATORIAL) != 0)
                 c = "h";
-            if (x < 0) {
+            if (x < 0)
+            {
                 x = -x;
                 sgn = -1;
-            } else
+            }
+            else
                 sgn = 1;
             if ((iflag & BIT_ROUND_MIN) != 0)
                 x += 0.5 / 60;
             if ((iflag & BIT_ROUND_SEC) != 0)
                 x += 0.5 / 3600;
-            if ((iflag & BIT_ZODIAC) != 0) {
+            if ((iflag & BIT_ZODIAC) != 0)
+            {
                 izod = (int)(x / 30);
                 x = (x % 30.0);
                 kdeg = (long)x;
                 s = C.sprintf(" %2ld %s ", kdeg, zod_nam[izod]);
-            } else {
+            }
+            else
+            {
                 kdeg = (long)x;
                 s = C.sprintf("%3ld%s", kdeg, c);
             }
@@ -1008,21 +1157,24 @@ namespace SweWin
             k = (long)(x * 10000);
             s1 = C.sprintf(".%04ld", k);
             s += s1;
-        return_dms: ;
-            if (sgn < 0) {
+            return_dms:;
+            if (sgn < 0)
+            {
                 int spi = s.IndexOfAny("0123456789".ToCharArray());
                 s = String.Concat(s.Substring(0, spi - 1), "-", s.Substring(spi));
             }
             return (s);
         }
 
-        static void do_print(ref string target, string info) {
+        static void do_print(ref string target, string info)
+        {
             if (String.IsNullOrWhiteSpace(target))
                 target = " ";
             target += info.Replace("\n", "\r\n");
         }
 
-        static void do_print(StringBuilder target, string info, params object[] args) {
+        static void do_print(StringBuilder target, string info, params object[] args)
+        {
             if (target.Length == 0)
                 target.Append(" ");
             if (args != null)
@@ -1030,14 +1182,16 @@ namespace SweWin
             target.Append(info.Replace("\n", "\r\n"));
         }
 
-        static int letter_to_ipl(char letter) {
+        static int letter_to_ipl(char letter)
+        {
             if (letter >= '0' && letter <= '9')
                 return letter - '0' + SwissEph.SE_SUN;
             if (letter >= 'A' && letter <= 'I')
                 return letter - 'A' + SwissEph.SE_MEAN_APOG;
             if (letter >= 'J' && letter <= 'X')
                 return letter - 'J' + SwissEph.SE_CUPIDO;
-            switch (letter) {
+            switch (letter)
+            {
                 case 'm': return SwissEph.SE_MEAN_NODE;
                 case 'n':
                 case 'o': return SwissEph.SE_ECL_NUT;
@@ -1047,14 +1201,16 @@ namespace SweWin
             return -1;
         }
 
-        static int atoulng(string s, ref uint lng) {
+        static int atoulng(string s, ref uint lng)
+        {
             if (uint.TryParse(s, out lng))
                 return SwissEph.OK;
             else
                 return SwissEph.ERR;
         }
 
-        static int atoslng(string s, ref int lng) {
+        static int atoslng(string s, ref int lng)
+        {
             if (int.TryParse(s, out lng))
                 return SwissEph.OK;
             else
@@ -1069,7 +1225,8 @@ namespace SweWin
          *   +                              on program drive
          *   +                              on drive C:
          */
-        int make_ephemeris_path(long iflag, ref string argv0) {
+        int make_ephemeris_path(long iflag, ref string argv0)
+        {
             //char path[AS_MAXCH], s[AS_MAXCH];
             string path, s;
             //string sp;
@@ -1083,7 +1240,8 @@ namespace SweWin
             path = C.sprintf(".%c", SwissEph.PATH_SEPARATOR);
             /* program directory */
             spi = argv0.LastIndexOf(dirglue);
-            if (spi >= 0) {
+            if (spi >= 0)
+            {
                 pathlen = spi;
                 path = argv0.Substring(0, pathlen) + SwissEph.PATH_SEPARATOR;
             }
@@ -1107,7 +1265,8 @@ namespace SweWin
             s = null;
             /* current working drive */
             sp[0] = Environment.CurrentDirectory;
-            if (sp[0] == null) {
+            if (sp[0] == null)
+            {
                 /*do_printf("error in getcwd()\n");*/
                 return SwissEph.ERR;
             }
@@ -1120,13 +1279,15 @@ namespace SweWin
                 sp[1] = null;
             /* drive C */
             sp[2] = "C";
-            for (i = 0; i < np; i++) {
+            for (i = 0; i < np; i++)
+            {
                 s = cpos[i];
                 if (!String.IsNullOrWhiteSpace(s) && s[0] == '.')	/* current directory */
                     continue;
                 if (s != null && s.Length > 1 && s[1] == ':')  /* drive already there */
                     continue;
-                for (j = 0; j < 3; j++) {
+                for (j = 0; j < 3; j++)
+                {
                     if (sp[j] != null)
                         path += C.sprintf("%c:%s%c", sp[j][0], s, ';');
                 }
@@ -1139,36 +1300,36 @@ namespace SweWin
             return SwissEph.OK;
         }
 
-///**************************************************************
-//cut the string s at any char in cutlist; put pointers to partial strings
-//into cpos[0..n-1], return number of partial strings;
-//if less than nmax fields are found, the first empty pointer is
-//set to NULL.
-//More than one character of cutlist in direct sequence count as one
-//separator only! cut_str_any("word,,,word2",","..) cuts only two parts,
-//cpos[0] = "word" and cpos[1] = "word2".
-//If more than nmax fields are found, nmax is returned and the
-//last field nmax-1 rmains un-cut.
-//**************************************************************/
-//static int cut_str_any(char *s, char *cutlist, char *cpos[], int nmax)
-//{
-//  int n = 1;
-//  cpos [0] = s;
-//  while (*s != '\0') {
-//    if ((strchr(cutlist, (int) *s) != NULL) && n < nmax) {
-//      *s = '\0';
-//      while (*(s + 1) != '\0' && strchr (cutlist, (int) *(s + 1)) != NULL) s++;
-//      cpos[n++] = s + 1;
-//    }
-//    if (*s == '\n' || *s == '\r') {	/* treat nl or cr like end of string */
-//      *s = '\0';
-//      break;
-//    }
-//    s++;
-//  }
-//  if (n < nmax) cpos[n] = NULL;
-//  return (n);
-//}	/* cutstr */
+        ///**************************************************************
+        //cut the string s at any char in cutlist; put pointers to partial strings
+        //into cpos[0..n-1], return number of partial strings;
+        //if less than nmax fields are found, the first empty pointer is
+        //set to NULL.
+        //More than one character of cutlist in direct sequence count as one
+        //separator only! cut_str_any("word,,,word2",","..) cuts only two parts,
+        //cpos[0] = "word" and cpos[1] = "word2".
+        //If more than nmax fields are found, nmax is returned and the
+        //last field nmax-1 rmains un-cut.
+        //**************************************************************/
+        //static int cut_str_any(char *s, char *cutlist, char *cpos[], int nmax)
+        //{
+        //  int n = 1;
+        //  cpos [0] = s;
+        //  while (*s != '\0') {
+        //    if ((strchr(cutlist, (int) *s) != NULL) && n < nmax) {
+        //      *s = '\0';
+        //      while (*(s + 1) != '\0' && strchr (cutlist, (int) *(s + 1)) != NULL) s++;
+        //      cpos[n++] = s + 1;
+        //    }
+        //    if (*s == '\n' || *s == '\r') {	/* treat nl or cr like end of string */
+        //      *s = '\0';
+        //      break;
+        //    }
+        //    s++;
+        //  }
+        //  if (n < nmax) cpos[n] = NULL;
+        //  return (n);
+        //}	/* cutstr */
 
     }
 }
